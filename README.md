@@ -1,0 +1,1 @@
+A simple but always classic Snake game in plain Javascript!!!
