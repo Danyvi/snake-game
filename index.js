@@ -1,11 +1,12 @@
 const startButton = document.querySelector('#start');
-const score = document.querySelector('#score');
+const scoreDisplay = document.querySelector('#score');
 const grid = document.querySelector('.grid');
 let squares = [];
 let currentSnake = [2,1,0];
 let direction = 1;
 const gridWidth = 10;
 let appleIndex = 0;
+let score = 0;
 
 function createGrid() {
 	for (let i=0; i < gridWidth * gridWidth; i++) {
@@ -50,15 +51,17 @@ function move() {
 	// deal with snakehead getting the apple (snake and apple are in the same square)
 	if (squares[currentSnake[0]].classList.contains('apple')) {
 		// remove the class apple (apple disappears)
-		squares[currentSnake[0]].classList.remove('apple')
+		squares[currentSnake[0]].classList.remove('apple');
 		// grow the snake by adding class of snake to it (adding 1 so it is longer)
-
+		squares[tail].classList.add('snake');
 		// grow snake array
-
+		currentSnake.push(tail);
 		// generate a new apple
-
+		generateApple()
 		// add 1 to the score
-
+		score++;
+		// display score
+		scoreDisplay.textContent = score;
 		// speed up our snake
 	}
 
@@ -68,7 +71,7 @@ function move() {
 let timerId = setInterval(move, 1000);
 // clearInterval(timerId)
 
-function generateApples() {
+function generateApple() {
 	do {
 		// generate random number/square
 		appleIndex = Math.floor(Math.random() * squares.length);
@@ -76,7 +79,7 @@ function generateApples() {
 	squares[appleIndex].classList.add('apple')
 }
 
-generateApples()
+generateApple()
 
 function control(e) {
 	console.log(e);
