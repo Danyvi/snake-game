@@ -9,6 +9,7 @@ let appleIndex = 0;
 let score = 0;
 let intervalTime = 1000;
 let speed = 0.9;
+let timerId = 0;
 
 function createGrid() {
 	for (let i=0; i < gridWidth * gridWidth; i++) {
@@ -25,6 +26,27 @@ currentSnake
 	.forEach(
 		index => squares[index].classList.add('snake')
 	);
+
+function startGame() {
+	// remove snake from grid
+	currentSnake
+		.forEach(index => squares[index].classList.remove('snake'));
+	// remove apple
+	squares[appleIndex].classList.remove('apple');
+	// reset variables
+	clearInterval(timerId);
+	currentSnake = [2,1,0];
+	score = 0;
+	// re add new score to browser
+	scoreDisplay.textContent = score;
+	direction = 1;
+	intervalTime = 1000;
+	generateApple();
+	// re add class of snake to our current snake
+	currentSnake
+		.forEach(index => squares[index].classList.add('snake'));
+	timerId = setInterval(move, intervalTime);
+}
 
 function move() {
 	if(
@@ -73,8 +95,6 @@ function move() {
 	squares[currentSnake[0]].classList.add('snake');
 }
 
-let timerId = setInterval(move, intervalTime);
-
 function generateApple() {
 	do {
 		// generate random number/square
@@ -102,4 +122,5 @@ function control(e) {
 	}
 }
 
-document.addEventListener('keydown', control); 
+document.addEventListener('keydown', control);
+startButton.addEventListener('click', startGame);
