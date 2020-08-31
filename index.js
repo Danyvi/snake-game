@@ -3,12 +3,12 @@ const score = document.querySelector('#score');
 const grid = document.querySelector('.grid');
 let squares = [];
 let currentSnake = [2,1,0];
-// let currentSnake = [45,44,43];
 let direction = 1;
-let gridWidth = 10;
+const gridWidth = 10;
+let appleIndex = 0;
 
 function createGrid() {
-	for (let i=0; i < 100; i++) {
+	for (let i=0; i < gridWidth * gridWidth; i++) {
 		const square = document.createElement('div');
 		square.classList.add('square');
 		grid.appendChild(square);
@@ -26,13 +26,13 @@ currentSnake
 function move() {
 	if(
 		// check if the snakehead has hit bottom wall (if you are already at the bottom row and hit downkey)
-		(currentSnake[0] + gridWidth >= 100 && direction === 10) ||
+		(currentSnake[0] + gridWidth >= gridWidth * gridWidth && direction === gridWidth) ||
 		// check if the snakehead has hit right wall (if you are already at the right wall and hit rightkey)
-		(currentSnake[0] % gridWidth === 9 && direction === 1) ||
+		(currentSnake[0] % gridWidth === gridWidth - 1 && direction === 1) ||
 		// check if the snakehead has hit left wall (if you are already at the left wall and hit leftkey)
 		(currentSnake[0] % gridWidth === 0 && direction === -1) ||
 		// check if the snakehead has hit upper wall (if you are already at the upper row and hit upkey)
-		(currentSnake[0] - gridWidth <=0 && direction === -10)  ||
+		(currentSnake[0] - gridWidth <=0 && direction === -gridWidth)  ||
 		// if the direction that we are going in already contains
 		// the class of .snake -> the snake goes into itself
 		squares[currentSnake[0] + direction].classList.contains('snake')
@@ -49,8 +49,18 @@ function move() {
 	squares[currentSnake[0]].classList.add('snake');
 }
 
-// let timerId = setInterval(move, 1000);
+let timerId = setInterval(move, 1000);
 // clearInterval(timerId)
+
+function generateApples() {
+	do {
+		// generate random number/square
+		appleIndex = Math.floor(Math.random() * squares.length);
+	} while (squares[appleIndex].classList.contains('snake'))
+	squares[appleIndex].classList.add('apple')
+}
+
+generateApples()
 
 function control(e) {
 	console.log(e);
